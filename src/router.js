@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const EjsUser = require("./models/conn");
+const bcrypt = require("bcryptjs");
 
 // middleware
+router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
@@ -56,16 +58,31 @@ router.post("/ragistration", async (req, res) => {
 
 // post login userdata
 
+// router.post("/login", async (req, res) => {
+//     try
+//     {
+//         const email = req.body.email;
+//         const password = req.body.password;
+//         const Userdata = await EjsUser.findOne({ email: email });
+//         Userdata.password === password ? res.status(201).render("index") : res.status(404).render("error", { werror: "invalid password" });
+        
+//     } catch (error) {
+//         res.status(501).render("error", { werror: error });
+//     }
+// })
+
 router.post("/login", async (req, res) => {
     try
     {
         const email = req.body.email;
         const password = req.body.password;
-        const Userdata = await EjsUser.findOne({ email: email });
-        Userdata.password === password ? res.status(201).render("index") : res.status(404).render("error", { werror: "invalid password" });
+        const userEmail = await EjsUser.findOne({ email: email });
+        const isMatch = await bcrypt.compare(password, userEmail.password);
+        isMatch ? res.status(201).render("index") : res.status(501).render("error", { werror: "invalid password" });
         
     } catch (error) {
-        res.status(404).render("error", { werror: error });
+        res.status(501).render("error", { werror: error });
+        console.log(error);
     }
 })
 

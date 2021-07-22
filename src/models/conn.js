@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const ejsDataSchema = new mongoose.Schema({
     fname: {
@@ -56,6 +57,14 @@ const ejsDataSchema = new mongoose.Schema({
         default : Date.now
     }
 });
+
+ejsDataSchema.pre("save", async function (next) {
+    if (this.isModified("password")) //kun event a kaj krte hobe ta bujhaise!! emple : password
+    {
+        this.password = await bcrypt.hash(this.password, 10);
+        this.Cpassword = undefined;
+    }
+})
 
 const EjsUser = new mongoose.model("EjsUser", ejsDataSchema);
 
