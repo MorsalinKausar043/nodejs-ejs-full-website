@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NodeJsBook-Ejs</title>
+    <!-- css stylesheet -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- bootstrap css setup -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <!-- favicon css setup -->
+    <link rel="shortcut icon" href="../images/ejs.png" type="image/x-icon">
+</head>
+<body>
+
+    <!-- preloader setup start -->
+    <%- include("../partials/preloader.ejs") -%> 
+    <!--  preloader setup end  -->
+   
+    <!-- 404 error start -->
+    <div class="container margin-Y">
+        <div class="row" >
+            <div class="col-10 col-md-12 d-flex align-items-center justify-content-center flex-column">
+                <h1 class="fw-bold">
+                    404 error page:)!
+                </h1>
+                <br>
+                <a class="button" href="/">Home page</a>
+                <br>
+                <P><%= werror %></P>
+            </div>
+        </div>
+    </div>
+    <!-- 404 error end -->
+
+      <!-- bootstrap js and jquery link setup -->
+      <script src="../jq/jquery.js" type="text/javascript"></script>
+      <script src="../js/bootstrap.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");
+
+/* body{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2{
+    letter-spacing: 2px;
+    font-size: 40px;
+    color: black;
+} */
+
+/* preloader setup start*/
+#preloader{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 1000;
+    background: #000 url("../images/black-preloader.gif") no-repeat center;
+    background-size: 10%;
+}
+/* preloader setup end*/
+
+/* common css */
+
+.margin-Y{
+    margin: 80px 0;
+}
+
+.margin-X{
+    margin: 0 100px;
+}
+
+.button{
+    padding: 10px 20px;
+    background-image: linear-gradient(to right top, #00dbe5, #00dfe4, #00e3e3, #03e7e2, #12ebe0);
+    color: white;
+    font-size: 17px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all .3s linear;
+}
+
+.button:hover{
+    background-image: linear-gradient(to right top, #00e3e3, #00dbe5, #00dfe4,   #12ebe0, #03e7e2);
+    color: white;
+    letter-spacing: 1px;
+}
+
+.header_para{
+    font-size: 12px;
+}
+
+.paypal_color{
+    color : hsl(216, 85%, 48%);
+}
+
+.visa_color{
+        color : hsla(226, 87%, 33%, 0.993);
+}
+
+.mastercard_color{
+    color: rgb(212, 27, 27);
+}
+
+footer{
+    margin: 0 !important;
+}
