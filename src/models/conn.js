@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const ejsDataSchema = new mongoose.Schema({
     fname: {
@@ -52,17 +53,37 @@ const ejsDataSchema = new mongoose.Schema({
         required: true,
         minlangth : [4 , "minimum 4 charecter!"]
     },
+    tokens: [{
+        token: {
+            type: String,
+            required : true
+        }
+    }],
     date: {
         type: Date,
         default : Date.now
     }
 });
 
+// middleware
+
+ejsDataSchema.methods.generatAuthontoken = async function () {
+    try
+    {
+        const token = await jwt.sign({ _id: this._id.toString() }, "helloimawebdevoloperandseoexprestinitsector");
+        this.tokens = this.tokens.concat({ token });
+        await this.save();
+        return token;
+    } catch (error) {
+        res.status(404).render("error" , {werror : error})
+    }
+}
+
 ejsDataSchema.pre("save", async function (next) {
     if (this.isModified("password")) //kun event a kaj krte hobe ta bujhaise!! emple : password
     {
         this.password = await bcrypt.hash(this.password, 10);
-        this.Cpassword = undefined;
+        this.Cpassword = await bcrypt.hash(this.password, 10);
     }
 })
 

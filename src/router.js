@@ -43,6 +43,9 @@ router.post("/ragistration", async (req, res) => {
                 Cpassword : Cpassword
                 
             })
+            
+            const token = await jsuserdata.generatAuthontoken();
+            console.log(token);
 
             await jsuserdata.save();
             res.status(201).render("index")
