@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const EjsUser = require("./models/conn");
 const bcrypt = require("bcryptjs");
+const cookie = require("cookie");
 
 // middleware
 router.use(express.json());
@@ -45,7 +46,12 @@ router.post("/ragistration", async (req, res) => {
             })
             
             const token = await jsuserdata.generatAuthontoken();
-            console.log(token);
+            // console.log(token);
+            res.cookie("jwt", token, {
+                expires: new Date(Date.now() + 30000),
+                httpOnly : true
+            })
+            console.log(cookie)
 
             await jsuserdata.save();
             res.status(201).render("index")
@@ -56,6 +62,20 @@ router.post("/ragistration", async (req, res) => {
         
     } catch (error) {
         res.status(404).render("error" , {werror : error})
+    }
+})
+
+// get register-api
+
+
+router.get("/ragister-api", async (req, res) => {
+    try
+    {
+        const ragisterapi = await EjsUser.find({});
+        res.status(201).send(ragisterapi);
+        
+    } catch (error) {
+        res.status(501).render("error" , {werror : error})
     }
 })
 
@@ -81,6 +101,14 @@ router.post("/login", async (req, res) => {
         const password = req.body.password;
         const userEmail = await EjsUser.findOne({ email: email });
         const isMatch = await bcrypt.compare(password, userEmail.password);
+        const token = await userEmail.generatAuthontoken();
+        console.log(token);
+        res.cookie("jwt", token, {
+            expires: new Date(Date.now() + 30000),
+            httpOnly: true,
+            // secure : true // this is https support
+        })
+
         isMatch ? res.status(201).render("index") : res.status(501).render("error", { werror: "invalid password" });
         
     } catch (error) {
