@@ -3,12 +3,15 @@ const router = express.Router();
 const EjsUser = require("./models/conn");
 const bcrypt = require("bcryptjs");
 const cookie = require("cookie");
+const cookieParser = require("cookie-parser");
+const auth = require("./middleware/auth");
 
 // middleware
 router.use(express.json());
+router.use(cookieParser());
 router.use(express.urlencoded({ extended: false }));
 
-router.get("/", (req, res) => {
+router.get("/", auth , (req, res) => {
     res.status(201).render("index");
 })
 
@@ -21,6 +24,25 @@ router.get("/ragistration", (req, res) => {
 
 router.get("/error", (req, res) => {
     res.status(201).render("error");
+})
+
+router.get("/logout", auth , async (req, res) => {
+    try
+    {
+            req.userMatch.tokens = req.userMatch.tokens.filter((val) => {
+            return val.token !== req.token;
+        });
+
+        // req.userMatch.tokens = [];
+
+        res.clearCookie("jwt");
+        await req.userMatch.save();
+        res.status(201).render("login");
+        
+    } catch (error) {
+        res.status(501).render("error", { werror: error });
+        console.log(error)
+    }
 })
 
 // regostratom post userdata
@@ -48,10 +70,10 @@ router.post("/ragistration", async (req, res) => {
             const token = await jsuserdata.generatAuthontoken();
             // console.log(token);
             res.cookie("jwt", token, {
-                expires: new Date(Date.now() + 30000),
+                expires: new Date(Date.now() + 3000000),
                 httpOnly : true
             })
-            console.log(cookie)
+            // console.log(cookie)
 
             await jsuserdata.save();
             res.status(201).render("index")
@@ -104,7 +126,7 @@ router.post("/login", async (req, res) => {
         const token = await userEmail.generatAuthontoken();
         console.log(token);
         res.cookie("jwt", token, {
-            expires: new Date(Date.now() + 30000),
+            expires: new Date(Date.now() + 3000000),
             httpOnly: true,
             // secure : true // this is https support
         })
